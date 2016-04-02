@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Matching Game</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+	img {position: absolute;}
+	div {position: absolute; height: 500px; width: 500px;}
+	#rightSide {left: 500px; border-left: 1px solid black;}
+	</style>
+</head>
+<body>
+	<h1>Matching Game</h1>
+	<p>Click on the extra smiling face on the left.</p>
+    <div id="leftSide"></div>
+    <div id="rightSide"></div>
+
+    <script type="text/javascript">
+    	var numberOfFaces = 5; // starting number of Smiles
+    	var theLeftSide = document.getElementById("leftSide"); // store leftSide in var
+        var theRightSide = document.getElementById("rightSide"); // store rightSide in var
+        var theBody = document.getElementsByTagName("body")[0]; // sore body in var
+    	var generateFaces = function () {  // creating game function 
+    		for (var i = 0; i < numberOfFaces; i++) { // creating 5 Smiles on the leftSide
+    			var smile = document.createElement("img"); // store image in var
+    			smile.setAttribute("src", "http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png"); // set source of the image
+    			smile.style.top = Math.floor(Math.random() * 401) + "px"; // set random top position of Smile
+    			smile.style.left = Math.floor(Math.random() * 401) + "px"; // set random left position of Smile
+    			theLeftSide.appendChild(smile); // append Smile to the left side
+                }
+            leftSideImages = theLeftSide.cloneNode(true); // cloning left side with all children
+            leftSideImages.removeChild(leftSideImages.lastChild); // delete 1 Smile from copy of leftSide
+            theRightSide.appendChild(leftSideImages); // append copy of leftSide to rightSide
+            theLeftSide.lastChild.onclick = function nextLevel(event) { // function which will be executed when the user clicks on the last child node in theLeftSide
+                event.stopPropagation(); // to ensure that event does not also get applied to other elements in the web page
+                numberOfFaces += 5; // increases the number stored in numberOfFaces by 5
+                while (theLeftSide.firstChild) { // delete all childNodes in leftSide
+                    theLeftSide.removeChild(theLeftSide.firstChild); 
+                }
+                while (theRightSide.firstChild) { // delete all childNodes in rightSide
+                    theRightSide.removeChild(theRightSide.firstChild);
+                }
+                generateFaces(); // new set of faces is generated
+            }
+            theBody.onclick = function gameOver() {  // function which will be executed when the user clicks on theBody
+                alert("Game Over!"); // game over message
+                theBody.onclick = null; // from now onwards nothing will happen when the user clicks anywhere in the web page
+                theLeftSide.lastChild.onclick = null; // from now onwards nothing will happen when the user clicks on the extra face
+            }
+
+    	}  
+    	window.onload = function() { // execute function when page is loaded
+    		generateFaces();
+    	}
+    </script>
+</body>
+</html>
